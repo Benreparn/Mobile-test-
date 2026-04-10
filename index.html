@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Julklapp 🎁 Blockbusters 2026</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #f5c842;
+      --gold-light: #ffe97a;
+      --red: #c0392b;
+      --dark: #0d0d1a;
+      --card-bg: rgba(255,255,255,0.06);
+      --border: rgba(245,200,66,0.25);
+    }
+
+    body {
+      background: var(--dark);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ---- Animated star background ---- */
+    #stars-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .page-wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 0 16px 60px;
+    }
+
+    /* ---- Hero ---- */
+    .hero {
+      text-align: center;
+      padding: 60px 0 32px;
+    }
+
+    .gift-icon {
+      font-size: 72px;
+      animation: bounce 2s infinite;
+      display: block;
+      line-height: 1;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-12px); }
+    }
+
+    .hero-label {
+      display: inline-block;
+      margin-top: 20px;
+      background: var(--red);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 20px;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(36px, 10vw, 52px);
+      font-weight: 900;
+      color: var(--gold);
+      line-height: 1.1;
+      margin-top: 14px;
+      text-shadow: 0 0 40px rgba(245,200,66,0.5);
+    }
+
+    .hero-sub {
+      font-size: 15px;
+      color: rgba(255,255,255,0.65);
+      margin-top: 10px;
+      line-height: 1.5;
+    }
+
+    /* ---- Event card ---- */
+    .event-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px 20px;
+      margin-top: 28px;
+      backdrop-filter: blur(8px);
+    }
+
+    .event-card-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .venue-logo {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      flex-shrink: 0;
+    }
+
+    .event-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1.2;
+    }
+
+    .event-tagline {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      margin-top: 2px;
+    }
+
+    .event-details {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .detail-pill {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 12px 14px;
+    }
+
+    .detail-pill .label {
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .detail-pill .value {
+      font-size: 14px;
+      font-weight: 500;
+      margin-top: 3px;
+      color: #fff;
+    }
+
+    /* ---- Message ---- */
+    .message-card {
+      background: linear-gradient(135deg, rgba(192,57,43,0.2), rgba(245,200,66,0.1));
+      border: 1px solid rgba(192,57,43,0.4);
+      border-radius: 20px;
+      padding: 24px 20px;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .message-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+
+    .message-card p {
+      font-size: 14px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .hearts {
+      font-size: 24px;
+      margin-top: 12px;
+      letter-spacing: 4px;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50%       { transform: scale(1.15); opacity: 0.8; }
+    }
+
+    /* ---- Setlist ---- */
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--gold);
+      margin: 32px 0 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .setlist {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .setlist-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: var(--card-bg);
+      border: 1px solid transparent;
+      transition: border-color 0.2s, background 0.2s;
+      cursor: default;
+    }
+
+    .setlist-item:hover {
+      background: rgba(245,200,66,0.07);
+      border-color: var(--border);
+    }
+
+    .track-num {
+      font-size: 11px;
+      color: rgba(255,255,255,0.3);
+      width: 20px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .track-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .track-title {
+      font-size: 14px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .track-artist {
+      font-size: 12px;
+      color: rgba(255,255,255,0.45);
+      margin-top: 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .track-icon {
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    /* ---- Confetti button ---- */
+    .confetti-btn {
+      display: block;
+      width: 100%;
+      margin-top: 32px;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--gold), #e6a817);
+      color: #0d0d1a;
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 30px rgba(245,200,66,0.35);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .confetti-btn:active {
+      transform: scale(0.97);
+      box-shadow: 0 2px 12px rgba(245,200,66,0.2);
+    }
+
+    /* ---- Countdown ---- */
+    .countdown-card {
+      text-align: center;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px 16px;
+      margin-top: 20px;
+    }
+
+    .countdown-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 16px;
+    }
+
+    .countdown-grid {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .countdown-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .countdown-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 38px;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+      min-width: 54px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 12px;
+      padding: 8px 4px;
+    }
+
+    .countdown-unit-label {
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+    }
+
+    .colon {
+      font-family: 'Playfair Display', serif;
+      font-size: 34px;
+      color: var(--gold);
+      opacity: 0.5;
+      margin-top: 6px;
+    }
+
+    /* ---- Footer ---- */
+    .footer {
+      text-align: center;
+      margin-top: 48px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.25);
+    }
+
+    /* ---- Confetti particles ---- */
+    .confetti-piece {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      top: -20px;
+      border-radius: 2px;
+      pointer-events: none;
+      z-index: 999;
+      animation: fall linear forwards;
+    }
+
+    @keyframes fall {
+      to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="stars-canvas"></canvas>
+
+<div class="page-wrapper">
+
+  <!-- Hero -->
+  <div class="hero">
+    <span class="gift-icon">🎁</span>
+    <span class="hero-label">Din julklapp 2025</span>
+    <h1 class="hero-title">Blockbusters<br>2026</h1>
+    <p class="hero-sub">En magisk kväll på Malmö Live — bara för oss!</p>
+  </div>
+
+  <!-- Event info -->
+  <div class="event-card">
+    <div class="event-card-header">
+      <div class="venue-logo">🎵</div>
+      <div>
+        <div class="event-name">Blockbusters 2026</div>
+        <div class="event-tagline">Malmö Live Konserthus</div>
+      </div>
+    </div>
+    <div class="event-details">
+      <div class="detail-pill">
+        <div class="label">Plats</div>
+        <div class="value">Malmö Live</div>
+      </div>
+      <div class="detail-pill">
+        <div class="label">Stad</div>
+        <div class="value">Malmö, Sverige</div>
+      </div>
+      <div class="detail-pill">
+        <div class="label">År</div>
+        <div class="value">2026</div>
+      </div>
+      <div class="detail-pill">
+        <div class="label">Sällskap</div>
+        <div class="value">Vi två! 🤍</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Countdown -->
+  <div class="countdown-card">
+    <div class="countdown-label">Nedräkning till konserten</div>
+    <div class="countdown-grid">
+      <div class="countdown-unit">
+        <div class="countdown-num" id="cd-days">--</div>
+        <div class="countdown-unit-label">Dagar</div>
+      </div>
+      <div class="colon">:</div>
+      <div class="countdown-unit">
+        <div class="countdown-num" id="cd-hours">--</div>
+        <div class="countdown-unit-label">Timmar</div>
+      </div>
+      <div class="colon">:</div>
+      <div class="countdown-unit">
+        <div class="countdown-num" id="cd-mins">--</div>
+        <div class="countdown-unit-label">Minuter</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Personal message -->
+  <div class="message-card">
+    <h2>Till mamma 🌟</h2>
+    <p>
+      Det här är din julklapp — vi ska uppleva Blockbusters 2026 på Malmö Live tillsammans!
+      En kväll fylld av musik, glädje och minnen vi aldrig glömmer.
+    </p>
+    <div class="hearts">❤️ 🎄 ❤️</div>
+  </div>
+
+  <!-- Setlist -->
+  <div class="section-title">🎶 Spellista</div>
+
+  <div class="setlist" id="setlist">
+    <!-- Populated by JS -->
+  </div>
+
+  <!-- Confetti button -->
+  <button class="confetti-btn" onclick="launchConfetti()">
+    🎉 Fira med konfetti!
+  </button>
+
+  <div class="footer">
+    Med kärlek &nbsp;❤️&nbsp; Blockbusters 2026 &bull; Malmö Live
+  </div>
+
+</div>
+
+<script>
+  // ---- Setlist data ----
+  // Classic blockbuster hits to match the show concept
+  const tracks = [
+    { title: "My Heart Will Go On",         artist: "Celine Dion",           icon: "🚢" },
+    { title: "I Will Always Love You",       artist: "Whitney Houston",       icon: "💛" },
+    { title: "Don't Stop Me Now",            artist: "Queen",                 icon: "🎸" },
+    { title: "Eye of the Tiger",             artist: "Survivor",              icon: "🐯" },
+    { title: "Bohemian Rhapsody",            artist: "Queen",                 icon: "👑" },
+    { title: "Footloose",                    artist: "Kenny Loggins",         icon: "🕺" },
+    { title: "Ghostbusters",                 artist: "Ray Parker Jr.",        icon: "👻" },
+    { title: "Take My Breath Away",          artist: "Berlin",                icon: "✈️" },
+    { title: "Holding Out for a Hero",       artist: "Bonnie Tyler",          icon: "🦸" },
+    { title: "The Power of Love",            artist: "Huey Lewis & the News", icon: "⚡" },
+    { title: "Sweet Child O' Mine",          artist: "Guns N' Roses",         icon: "🌹" },
+    { title: "Jump",                         artist: "Van Halen",             icon: "🎹" },
+    { title: "Don't You (Forget About Me)",  artist: "Simple Minds",          icon: "✊" },
+    { title: "Livin' on a Prayer",           artist: "Bon Jovi",              icon: "🙏" },
+    { title: "Every Breath You Take",        artist: "The Police",            icon: "🌬️" },
+    { title: "Total Eclipse of the Heart",   artist: "Bonnie Tyler",          icon: "🌑" },
+    { title: "Material Girl",                artist: "Madonna",               icon: "💎" },
+    { title: "Girls Just Want to Have Fun",  artist: "Cyndi Lauper",          icon: "🎀" },
+    { title: "We Are the Champions",         artist: "Queen",                 icon: "🏆" },
+    { title: "Dancing Queen",                artist: "ABBA",                  icon: "💃" },
+  ];
+
+  const setlistEl = document.getElementById('setlist');
+  tracks.forEach((t, i) => {
+    const div = document.createElement('div');
+    div.className = 'setlist-item';
+    div.innerHTML = `
+      <span class="track-num">${String(i + 1).padStart(2, '0')}</span>
+      <div class="track-info">
+        <div class="track-title">${t.title}</div>
+        <div class="track-artist">${t.artist}</div>
+      </div>
+      <span class="track-icon">${t.icon}</span>
+    `;
+    setlistEl.appendChild(div);
+  });
+
+  // ---- Countdown ----
+  // Update this date when the exact concert date is known
+  const CONCERT_DATE = new Date('2026-12-31T19:00:00');
+
+  function updateCountdown() {
+    const now = new Date();
+    const diff = CONCERT_DATE - now;
+    if (diff <= 0) {
+      document.getElementById('cd-days').textContent  = '00';
+      document.getElementById('cd-hours').textContent = '00';
+      document.getElementById('cd-mins').textContent  = '00';
+      return;
+    }
+    const days  = Math.floor(diff / 864e5);
+    const hours = Math.floor((diff % 864e5) / 36e5);
+    const mins  = Math.floor((diff % 36e5) / 6e4);
+    document.getElementById('cd-days').textContent  = String(days).padStart(2,'0');
+    document.getElementById('cd-hours').textContent = String(hours).padStart(2,'0');
+    document.getElementById('cd-mins').textContent  = String(mins).padStart(2,'0');
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 30000);
+
+  // ---- Starfield ----
+  const canvas = document.getElementById('stars-canvas');
+  const ctx    = canvas.getContext('2d');
+  let stars    = [];
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  function initStars(n = 120) {
+    stars = Array.from({ length: n }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.4 + 0.2,
+      a: Math.random(),
+      da: (Math.random() - 0.5) * 0.008,
+    }));
+  }
+
+  function drawStars() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (const s of stars) {
+      s.a = Math.max(0.05, Math.min(1, s.a + s.da));
+      if (s.a <= 0.05 || s.a >= 1) s.da *= -1;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,220,${s.a})`;
+      ctx.fill();
+    }
+    requestAnimationFrame(drawStars);
+  }
+
+  window.addEventListener('resize', () => { resize(); initStars(); });
+  resize(); initStars(); drawStars();
+
+  // ---- Confetti ----
+  const COLORS = ['#f5c842','#c0392b','#2ecc71','#3498db','#e91e63','#ff9800','#fff'];
+
+  function launchConfetti() {
+    const count = 80;
+    for (let i = 0; i < count; i++) {
+      setTimeout(() => spawnPiece(), i * 18);
+    }
+  }
+
+  function spawnPiece() {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    const size = Math.random() * 8 + 6;
+    el.style.cssText = `
+      left: ${Math.random() * 100}vw;
+      width: ${size}px;
+      height: ${size}px;
+      background: ${COLORS[Math.floor(Math.random() * COLORS.length)]};
+      border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+      animation-duration: ${Math.random() * 1.5 + 1.8}s;
+      animation-delay: 0s;
+    `;
+    document.body.appendChild(el);
+    el.addEventListener('animationend', () => el.remove());
+  }
+</script>
+
+</body>
+</html>
