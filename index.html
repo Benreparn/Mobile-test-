@@ -3,20 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>Julklapp 🎁 Blockbusters 2026</title>
+  <title>Julklapp 🎁 Blockbusters 2026 – Malmö Live</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;500;600&display=swap');
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --gold: #f5c842;
-      --gold-light: #ffe97a;
-      --red: #c0392b;
-      --dark: #0d0d1a;
-      --card-bg: rgba(255,255,255,0.06);
-      --border: rgba(245,200,66,0.25);
+      --gold:      #f5c842;
+      --gold-glow: rgba(245,200,66,0.4);
+      --red:       #c0392b;
+      --dark:      #080810;
+      --navy:      #0a0a1a;
+      --card:      rgba(255,255,255,0.05);
+      --border:    rgba(245,200,66,0.2);
     }
+
+    html { scroll-behavior: smooth; }
 
     body {
       background: var(--dark);
@@ -26,12 +29,40 @@
       overflow-x: hidden;
     }
 
-    /* ---- Animated star background ---- */
+    /* ======= Cinematic film-strip top bar ======= */
+    .filmstrip {
+      width: 100%;
+      height: 18px;
+      background: repeating-linear-gradient(
+        90deg,
+        #111 0px, #111 12px,
+        #1a1a1a 12px, #1a1a1a 14px,
+        #111 14px, #111 26px,
+        transparent 26px, transparent 34px
+      );
+      border-bottom: 2px solid #222;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ======= Animated spotlight bg ======= */
+    .spotlight {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 60% 40% at 30% 0%, rgba(245,200,66,0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 35% at 80% 10%, rgba(100,120,255,0.05) 0%, transparent 60%);
+    }
+
+    /* ======= Stars ======= */
     #stars-canvas {
       position: fixed;
       inset: 0;
       z-index: 0;
       pointer-events: none;
+      opacity: 0.6;
     }
 
     .page-wrapper {
@@ -39,78 +70,80 @@
       z-index: 1;
       max-width: 480px;
       margin: 0 auto;
-      padding: 0 16px 60px;
+      padding: 0 16px 70px;
     }
 
-    /* ---- Hero ---- */
+    /* ======= Hero ======= */
     .hero {
       text-align: center;
-      padding: 60px 0 32px;
+      padding: 48px 0 28px;
     }
 
-    .gift-icon {
-      font-size: 72px;
-      animation: bounce 2s infinite;
-      display: block;
-      line-height: 1;
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50%       { transform: translateY(-12px); }
-    }
-
-    .hero-label {
-      display: inline-block;
-      margin-top: 20px;
+    .gift-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       background: var(--red);
       color: #fff;
       font-size: 11px;
       font-weight: 600;
       letter-spacing: 2px;
       text-transform: uppercase;
-      padding: 5px 14px;
+      padding: 6px 14px;
       border-radius: 20px;
+      margin-bottom: 20px;
     }
 
     .hero-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(36px, 10vw, 52px);
+      font-family: 'Cinzel', serif;
+      font-size: clamp(38px, 11vw, 58px);
       font-weight: 900;
       color: var(--gold);
-      line-height: 1.1;
+      line-height: 1.0;
+      text-shadow: 0 0 60px rgba(245,200,66,0.55), 0 2px 0 rgba(0,0,0,0.8);
+      letter-spacing: 2px;
+    }
+
+    .hero-year {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(20px, 5vw, 28px);
+      color: rgba(245,200,66,0.6);
+      letter-spacing: 8px;
+      margin-top: 4px;
+    }
+
+    .hero-orchestra {
       margin-top: 14px;
-      text-shadow: 0 0 40px rgba(245,200,66,0.5);
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 1px;
     }
 
-    .hero-sub {
-      font-size: 15px;
-      color: rgba(255,255,255,0.65);
-      margin-top: 10px;
-      line-height: 1.5;
+    .hero-orchestra strong {
+      color: rgba(255,255,255,0.85);
     }
 
-    /* ---- Event card ---- */
+    /* ======= Event card ======= */
     .event-card {
-      background: var(--card-bg);
+      background: var(--card);
       border: 1px solid var(--border);
       border-radius: 20px;
-      padding: 24px 20px;
-      margin-top: 28px;
-      backdrop-filter: blur(8px);
+      padding: 22px 18px;
+      margin-top: 24px;
+      backdrop-filter: blur(10px);
     }
 
-    .event-card-header {
+    .event-card-top {
       display: flex;
       align-items: center;
       gap: 14px;
     }
 
-    .venue-logo {
+    .mso-badge {
       width: 52px;
       height: 52px;
       border-radius: 14px;
-      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      background: linear-gradient(135deg, #1a1030, #0d0820);
       border: 1px solid var(--border);
       display: flex;
       align-items: center;
@@ -119,93 +152,187 @@
       flex-shrink: 0;
     }
 
-    .event-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 22px;
-      font-weight: 700;
+    .event-title-block .name {
+      font-family: 'Cinzel', serif;
+      font-size: 18px;
       color: var(--gold);
-      line-height: 1.2;
     }
 
-    .event-tagline {
+    .event-title-block .sub {
       font-size: 12px;
-      color: rgba(255,255,255,0.5);
+      color: rgba(255,255,255,0.45);
       margin-top: 2px;
     }
 
-    .event-details {
-      margin-top: 20px;
+    .details-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      gap: 10px;
+      margin-top: 18px;
     }
 
     .detail-pill {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
       border-radius: 12px;
-      padding: 12px 14px;
+      padding: 11px 13px;
     }
 
-    .detail-pill .label {
-      font-size: 10px;
-      letter-spacing: 1px;
+    .detail-pill .lbl {
+      font-size: 9px;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
       color: var(--gold);
       font-weight: 600;
     }
 
-    .detail-pill .value {
-      font-size: 14px;
+    .detail-pill .val {
+      font-size: 13px;
       font-weight: 500;
       margin-top: 3px;
-      color: #fff;
     }
 
-    /* ---- Message ---- */
-    .message-card {
-      background: linear-gradient(135deg, rgba(192,57,43,0.2), rgba(245,200,66,0.1));
-      border: 1px solid rgba(192,57,43,0.4);
+    /* ======= Hosts ======= */
+    .hosts-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .host-pill {
+      flex: 1;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      padding: 11px 13px;
+      text-align: center;
+    }
+
+    .host-pill .lbl {
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .host-pill .val {
+      font-size: 12px;
+      margin-top: 4px;
+      line-height: 1.35;
+    }
+
+    /* ======= Countdown ======= */
+    .countdown-card {
+      text-align: center;
+      background: var(--card);
+      border: 1px solid var(--border);
       border-radius: 20px;
-      padding: 24px 20px;
-      margin-top: 20px;
+      padding: 22px 14px;
+      margin-top: 16px;
+    }
+
+    .countdown-label {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 14px;
+    }
+
+    .countdown-grid {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .cd-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .cd-num {
+      font-family: 'Cinzel', serif;
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+      min-width: 60px;
+      background: rgba(245,200,66,0.06);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 8px 4px;
+      text-shadow: 0 0 20px var(--gold-glow);
+    }
+
+    .cd-lbl {
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .cd-colon {
+      font-family: 'Cinzel', serif;
+      font-size: 30px;
+      color: rgba(245,200,66,0.4);
+      margin-top: 6px;
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.2; }
+    }
+
+    /* ======= Message ======= */
+    .message-card {
+      background: linear-gradient(135deg, rgba(192,57,43,0.18), rgba(245,200,66,0.08));
+      border: 1px solid rgba(192,57,43,0.35);
+      border-radius: 20px;
+      padding: 22px 18px;
+      margin-top: 16px;
       text-align: center;
     }
 
     .message-card h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 20px;
+      font-family: 'Cinzel', serif;
+      font-size: 18px;
       color: var(--gold);
       margin-bottom: 10px;
     }
 
     .message-card p {
       font-size: 14px;
-      line-height: 1.7;
-      color: rgba(255,255,255,0.8);
+      line-height: 1.75;
+      color: rgba(255,255,255,0.78);
     }
 
     .hearts {
-      font-size: 24px;
+      font-size: 22px;
       margin-top: 12px;
-      letter-spacing: 4px;
-      animation: pulse 1.5s infinite;
+      letter-spacing: 6px;
+      animation: pulse 2s ease-in-out infinite;
     }
 
     @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50%       { transform: scale(1.15); opacity: 0.8; }
+      0%, 100% { transform: scale(1); }
+      50%       { transform: scale(1.12); }
     }
 
-    /* ---- Setlist ---- */
+    /* ======= Section heading ======= */
     .section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 20px;
+      font-family: 'Cinzel', serif;
+      font-size: 16px;
       color: var(--gold);
-      margin: 32px 0 14px;
+      margin: 30px 0 12px;
       display: flex;
       align-items: center;
       gap: 10px;
+      letter-spacing: 1px;
     }
 
     .section-title::after {
@@ -215,43 +342,39 @@
       background: var(--border);
     }
 
+    /* ======= Setlist ======= */
     .setlist {
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 3px;
     }
 
     .setlist-item {
       display: flex;
       align-items: center;
-      gap: 14px;
-      padding: 12px 16px;
-      border-radius: 12px;
-      background: var(--card-bg);
+      gap: 12px;
+      padding: 11px 14px;
+      border-radius: 13px;
+      background: var(--card);
       border: 1px solid transparent;
       transition: border-color 0.2s, background 0.2s;
-      cursor: default;
     }
 
     .setlist-item:hover {
-      background: rgba(245,200,66,0.07);
+      background: rgba(245,200,66,0.06);
       border-color: var(--border);
     }
 
-    .track-num {
-      font-size: 11px;
-      color: rgba(255,255,255,0.3);
-      width: 20px;
-      text-align: right;
+    .film-emoji {
+      font-size: 22px;
+      width: 32px;
+      text-align: center;
       flex-shrink: 0;
     }
 
-    .track-info {
-      flex: 1;
-      min-width: 0;
-    }
+    .film-info { flex: 1; min-width: 0; }
 
-    .track-title {
+    .film-title {
       font-size: 14px;
       font-weight: 500;
       white-space: nowrap;
@@ -259,114 +382,75 @@
       text-overflow: ellipsis;
     }
 
-    .track-artist {
-      font-size: 12px;
-      color: rgba(255,255,255,0.45);
+    .film-year {
+      font-size: 11px;
+      color: rgba(255,255,255,0.38);
+      margin-top: 1px;
+    }
+
+    .film-composer {
+      font-size: 11px;
+      color: rgba(245,200,66,0.6);
       margin-top: 1px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    .track-icon {
-      font-size: 16px;
-      flex-shrink: 0;
-    }
-
-    /* ---- Confetti button ---- */
-    .confetti-btn {
+    /* ======= Confetti button ======= */
+    .celebrate-btn {
       display: block;
       width: 100%;
-      margin-top: 32px;
+      margin-top: 30px;
       padding: 16px;
-      background: linear-gradient(135deg, var(--gold), #e6a817);
-      color: #0d0d1a;
-      font-size: 16px;
+      background: linear-gradient(135deg, #f5c842, #d4a017);
+      color: #0a0a0a;
+      font-size: 15px;
       font-weight: 700;
       border: none;
       border-radius: 16px;
       cursor: pointer;
-      letter-spacing: 0.5px;
-      box-shadow: 0 4px 30px rgba(245,200,66,0.35);
+      font-family: 'Cinzel', serif;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 30px rgba(245,200,66,0.3);
       transition: transform 0.15s, box-shadow 0.15s;
     }
 
-    .confetti-btn:active {
+    .celebrate-btn:active {
       transform: scale(0.97);
-      box-shadow: 0 2px 12px rgba(245,200,66,0.2);
+      box-shadow: 0 2px 12px rgba(245,200,66,0.15);
     }
 
-    /* ---- Countdown ---- */
-    .countdown-card {
-      text-align: center;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 24px 16px;
-      margin-top: 20px;
-    }
-
-    .countdown-label {
-      font-size: 11px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.45);
-      margin-bottom: 16px;
-    }
-
-    .countdown-grid {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .countdown-unit {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .countdown-num {
-      font-family: 'Playfair Display', serif;
-      font-size: 38px;
-      font-weight: 700;
-      color: var(--gold);
-      line-height: 1;
-      min-width: 54px;
-      background: rgba(255,255,255,0.04);
-      border-radius: 12px;
-      padding: 8px 4px;
-    }
-
-    .countdown-unit-label {
-      font-size: 10px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.4);
-    }
-
-    .colon {
-      font-family: 'Playfair Display', serif;
-      font-size: 34px;
-      color: var(--gold);
-      opacity: 0.5;
-      margin-top: 6px;
-    }
-
-    /* ---- Footer ---- */
+    /* ======= Footer ======= */
     .footer {
       text-align: center;
-      margin-top: 48px;
-      font-size: 12px;
-      color: rgba(255,255,255,0.25);
+      margin-top: 50px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.2);
+      letter-spacing: 1px;
     }
 
-    /* ---- Confetti particles ---- */
+    /* ======= Filmstrip bottom ======= */
+    .filmstrip-bottom {
+      width: 100%;
+      height: 18px;
+      background: repeating-linear-gradient(
+        90deg,
+        #111 0px, #111 12px,
+        #1a1a1a 12px, #1a1a1a 14px,
+        #111 14px, #111 26px,
+        transparent 26px, transparent 34px
+      );
+      border-top: 2px solid #222;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      z-index: 10;
+    }
+
+    /* ======= Confetti ======= */
     .confetti-piece {
       position: fixed;
-      width: 10px;
-      height: 10px;
       top: -20px;
       border-radius: 2px;
       pointer-events: none;
@@ -381,43 +465,56 @@
 </head>
 <body>
 
+<div class="filmstrip"></div>
+<div class="spotlight"></div>
 <canvas id="stars-canvas"></canvas>
 
 <div class="page-wrapper">
 
   <!-- Hero -->
   <div class="hero">
-    <span class="gift-icon">🎁</span>
-    <span class="hero-label">Din julklapp 2025</span>
-    <h1 class="hero-title">Blockbusters<br>2026</h1>
-    <p class="hero-sub">En magisk kväll på Malmö Live — bara för oss!</p>
+    <div class="gift-badge">🎁 Din julklapp 2025</div>
+    <div class="hero-title">BLOCK<br>BUSTERS</div>
+    <div class="hero-year">2 0 2 6</div>
+    <div class="hero-orchestra">
+      <strong>Malmö SymfoniOrkester</strong><br>
+      på Malmö Live Konserthus
+    </div>
   </div>
 
-  <!-- Event info -->
+  <!-- Event details -->
   <div class="event-card">
-    <div class="event-card-header">
-      <div class="venue-logo">🎵</div>
-      <div>
-        <div class="event-name">Blockbusters 2026</div>
-        <div class="event-tagline">Malmö Live Konserthus</div>
+    <div class="event-card-top">
+      <div class="mso-badge">🎻</div>
+      <div class="event-title-block">
+        <div class="name">Blockbusters 2026</div>
+        <div class="sub">Episk filmmusik live med symfoniorkester</div>
       </div>
     </div>
-    <div class="event-details">
+
+    <div class="details-grid">
       <div class="detail-pill">
-        <div class="label">Plats</div>
-        <div class="value">Malmö Live</div>
+        <div class="lbl">Datum</div>
+        <div class="val">10 april 2026</div>
       </div>
       <div class="detail-pill">
-        <div class="label">Stad</div>
-        <div class="value">Malmö, Sverige</div>
+        <div class="lbl">Tid</div>
+        <div class="val">19:00</div>
       </div>
       <div class="detail-pill">
-        <div class="label">År</div>
-        <div class="value">2026</div>
+        <div class="lbl">Plats</div>
+        <div class="val">Malmö Live</div>
       </div>
       <div class="detail-pill">
-        <div class="label">Sällskap</div>
-        <div class="value">Vi två! 🤍</div>
+        <div class="lbl">Längd</div>
+        <div class="val">~2 tim 10 min</div>
+      </div>
+    </div>
+
+    <div class="hosts-row">
+      <div class="host-pill">
+        <div class="lbl">Programledare</div>
+        <div class="val">Tomas Kaminski<br>&amp; Elvira Gullis Gullberg</div>
       </div>
     </div>
   </div>
@@ -426,19 +523,19 @@
   <div class="countdown-card">
     <div class="countdown-label">Nedräkning till konserten</div>
     <div class="countdown-grid">
-      <div class="countdown-unit">
-        <div class="countdown-num" id="cd-days">--</div>
-        <div class="countdown-unit-label">Dagar</div>
+      <div class="cd-unit">
+        <div class="cd-num" id="cd-days">--</div>
+        <div class="cd-lbl">Dagar</div>
       </div>
-      <div class="colon">:</div>
-      <div class="countdown-unit">
-        <div class="countdown-num" id="cd-hours">--</div>
-        <div class="countdown-unit-label">Timmar</div>
+      <div class="cd-colon">:</div>
+      <div class="cd-unit">
+        <div class="cd-num" id="cd-hours">--</div>
+        <div class="cd-lbl">Timmar</div>
       </div>
-      <div class="colon">:</div>
-      <div class="countdown-unit">
-        <div class="countdown-num" id="cd-mins">--</div>
-        <div class="countdown-unit-label">Minuter</div>
+      <div class="cd-colon">:</div>
+      <div class="cd-unit">
+        <div class="cd-num" id="cd-mins">--</div>
+        <div class="cd-lbl">Minuter</div>
       </div>
     </div>
   </div>
@@ -447,95 +544,89 @@
   <div class="message-card">
     <h2>Till mamma 🌟</h2>
     <p>
-      Det här är din julklapp — vi ska uppleva Blockbusters 2026 på Malmö Live tillsammans!
-      En kväll fylld av musik, glädje och minnen vi aldrig glömmer.
+      Det här är din julklapp — vi ska uppleva Malmö SymfoniOrkester
+      framföra de mest episka filmmusikklassikerna live på Malmö Live!
+      En kväll av storslagen musik och oförglömliga minnen.
     </p>
     <div class="hearts">❤️ 🎄 ❤️</div>
   </div>
 
   <!-- Setlist -->
-  <div class="section-title">🎶 Spellista</div>
+  <div class="section-title">🎬 Filmmusik på programmet</div>
 
-  <div class="setlist" id="setlist">
-    <!-- Populated by JS -->
-  </div>
+  <div class="setlist" id="setlist"></div>
 
-  <!-- Confetti button -->
-  <button class="confetti-btn" onclick="launchConfetti()">
+  <!-- Celebrate -->
+  <button class="celebrate-btn" onclick="launchConfetti()">
     🎉 Fira med konfetti!
   </button>
 
   <div class="footer">
-    Med kärlek &nbsp;❤️&nbsp; Blockbusters 2026 &bull; Malmö Live
+    Malmö SymfoniOrkester &bull; Malmö Live &bull; 10 april 2026
   </div>
 
 </div>
 
+<div class="filmstrip-bottom"></div>
+
 <script>
-  // ---- Setlist data ----
-  // Classic blockbuster hits to match the show concept
-  const tracks = [
-    { title: "My Heart Will Go On",         artist: "Celine Dion",           icon: "🚢" },
-    { title: "I Will Always Love You",       artist: "Whitney Houston",       icon: "💛" },
-    { title: "Don't Stop Me Now",            artist: "Queen",                 icon: "🎸" },
-    { title: "Eye of the Tiger",             artist: "Survivor",              icon: "🐯" },
-    { title: "Bohemian Rhapsody",            artist: "Queen",                 icon: "👑" },
-    { title: "Footloose",                    artist: "Kenny Loggins",         icon: "🕺" },
-    { title: "Ghostbusters",                 artist: "Ray Parker Jr.",        icon: "👻" },
-    { title: "Take My Breath Away",          artist: "Berlin",                icon: "✈️" },
-    { title: "Holding Out for a Hero",       artist: "Bonnie Tyler",          icon: "🦸" },
-    { title: "The Power of Love",            artist: "Huey Lewis & the News", icon: "⚡" },
-    { title: "Sweet Child O' Mine",          artist: "Guns N' Roses",         icon: "🌹" },
-    { title: "Jump",                         artist: "Van Halen",             icon: "🎹" },
-    { title: "Don't You (Forget About Me)",  artist: "Simple Minds",          icon: "✊" },
-    { title: "Livin' on a Prayer",           artist: "Bon Jovi",              icon: "🙏" },
-    { title: "Every Breath You Take",        artist: "The Police",            icon: "🌬️" },
-    { title: "Total Eclipse of the Heart",   artist: "Bonnie Tyler",          icon: "🌑" },
-    { title: "Material Girl",                artist: "Madonna",               icon: "💎" },
-    { title: "Girls Just Want to Have Fun",  artist: "Cyndi Lauper",          icon: "🎀" },
-    { title: "We Are the Champions",         artist: "Queen",                 icon: "🏆" },
-    { title: "Dancing Queen",                artist: "ABBA",                  icon: "💃" },
+  // ---- Film music setlist ----
+  // Based on Blockbusters 2024 program + confirmed 2026 films
+  const films = [
+    { title: "Star Wars",           year: "1977",  composer: "John Williams",        emoji: "⚔️"  },
+    { title: "E.T.",                year: "1982",  composer: "John Williams",        emoji: "🌙"  },
+    { title: "Indiana Jones",       year: "1981",  composer: "John Williams",        emoji: "🎩"  },
+    { title: "Batman",              year: "1989",  composer: "Danny Elfman",         emoji: "🦇"  },
+    { title: "Die Hard",            year: "1988",  composer: "Michael Kamen",        emoji: "💥"  },
+    { title: "Aliens",              year: "1986",  composer: "James Horner",         emoji: "👾"  },
+    { title: "Terminator 2",        year: "1991",  composer: "Brad Fiedel",          emoji: "🤖"  },
+    { title: "Jurassic Park",       year: "1993",  composer: "John Williams",        emoji: "🦖"  },
+    { title: "Gladiator",           year: "2000",  composer: "Hans Zimmer",          emoji: "⚔️"  },
+    { title: "Harry Potter",        year: "2001",  composer: "John Williams",        emoji: "🧙"  },
+    { title: "The Lord of the Rings",year: "2001", composer: "Howard Shore",         emoji: "💍"  },
+    { title: "Pirates of the Caribbean",year:"2003",composer: "Hans Zimmer",        emoji: "🏴‍☠️" },
+    { title: "Avatar",              year: "2009",  composer: "James Horner",         emoji: "🌿"  },
+    { title: "The Avengers",        year: "2012",  composer: "Alan Silvestri",       emoji: "🦸"  },
+    { title: "The Hobbit",          year: "2012",  composer: "Howard Shore",         emoji: "🧝"  },
+    { title: "Interstellar",        year: "2014",  composer: "Hans Zimmer",          emoji: "🚀"  },
   ];
 
-  const setlistEl = document.getElementById('setlist');
-  tracks.forEach((t, i) => {
+  const listEl = document.getElementById('setlist');
+  films.forEach((f) => {
     const div = document.createElement('div');
     div.className = 'setlist-item';
     div.innerHTML = `
-      <span class="track-num">${String(i + 1).padStart(2, '0')}</span>
-      <div class="track-info">
-        <div class="track-title">${t.title}</div>
-        <div class="track-artist">${t.artist}</div>
+      <span class="film-emoji">${f.emoji}</span>
+      <div class="film-info">
+        <div class="film-title">${f.title}</div>
+        <div class="film-year">${f.year}</div>
+        <div class="film-composer">Musik: ${f.composer}</div>
       </div>
-      <span class="track-icon">${t.icon}</span>
     `;
-    setlistEl.appendChild(div);
+    listEl.appendChild(div);
   });
 
   // ---- Countdown ----
-  // Update this date when the exact concert date is known
-  const CONCERT_DATE = new Date('2026-12-31T19:00:00');
+  const CONCERT = new Date('2026-04-10T19:00:00');
 
-  function updateCountdown() {
-    const now = new Date();
-    const diff = CONCERT_DATE - now;
+  function tick() {
+    const diff = CONCERT - new Date();
     if (diff <= 0) {
-      document.getElementById('cd-days').textContent  = '00';
-      document.getElementById('cd-hours').textContent = '00';
-      document.getElementById('cd-mins').textContent  = '00';
+      ['cd-days','cd-hours','cd-mins'].forEach(id =>
+        document.getElementById(id).textContent = '00');
       return;
     }
-    const days  = Math.floor(diff / 864e5);
-    const hours = Math.floor((diff % 864e5) / 36e5);
-    const mins  = Math.floor((diff % 36e5) / 6e4);
-    document.getElementById('cd-days').textContent  = String(days).padStart(2,'0');
-    document.getElementById('cd-hours').textContent = String(hours).padStart(2,'0');
-    document.getElementById('cd-mins').textContent  = String(mins).padStart(2,'0');
+    const d = Math.floor(diff / 864e5);
+    const h = Math.floor((diff % 864e5) / 36e5);
+    const m = Math.floor((diff % 36e5) / 6e4);
+    document.getElementById('cd-days').textContent  = String(d).padStart(2,'0');
+    document.getElementById('cd-hours').textContent = String(h).padStart(2,'0');
+    document.getElementById('cd-mins').textContent  = String(m).padStart(2,'0');
   }
-  updateCountdown();
-  setInterval(updateCountdown, 30000);
+  tick();
+  setInterval(tick, 20000);
 
-  // ---- Starfield ----
+  // ---- Stars ----
   const canvas = document.getElementById('stars-canvas');
   const ctx    = canvas.getContext('2d');
   let stars    = [];
@@ -545,59 +636,53 @@
     canvas.height = window.innerHeight;
   }
 
-  function initStars(n = 120) {
-    stars = Array.from({ length: n }, () => ({
+  function initStars() {
+    stars = Array.from({ length: 100 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      r: Math.random() * 1.4 + 0.2,
+      r: Math.random() * 1.2 + 0.2,
       a: Math.random(),
-      da: (Math.random() - 0.5) * 0.008,
+      da: (Math.random() - 0.5) * 0.006,
     }));
   }
 
-  function drawStars() {
+  function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (const s of stars) {
       s.a = Math.max(0.05, Math.min(1, s.a + s.da));
       if (s.a <= 0.05 || s.a >= 1) s.da *= -1;
       ctx.beginPath();
       ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255,255,220,${s.a})`;
+      ctx.fillStyle = `rgba(255,248,200,${s.a})`;
       ctx.fill();
     }
-    requestAnimationFrame(drawStars);
+    requestAnimationFrame(draw);
   }
 
   window.addEventListener('resize', () => { resize(); initStars(); });
-  resize(); initStars(); drawStars();
+  resize(); initStars(); draw();
 
   // ---- Confetti ----
-  const COLORS = ['#f5c842','#c0392b','#2ecc71','#3498db','#e91e63','#ff9800','#fff'];
+  const COLORS = ['#f5c842','#c0392b','#2ecc71','#3498db','#e91e63','#ff9800','#fff','#a855f7'];
 
   function launchConfetti() {
-    const count = 80;
-    for (let i = 0; i < count; i++) {
-      setTimeout(() => spawnPiece(), i * 18);
-    }
+    for (let i = 0; i < 90; i++) setTimeout(spawnPiece, i * 16);
   }
 
   function spawnPiece() {
     const el = document.createElement('div');
     el.className = 'confetti-piece';
-    const size = Math.random() * 8 + 6;
+    const size = Math.random() * 9 + 5;
     el.style.cssText = `
-      left: ${Math.random() * 100}vw;
-      width: ${size}px;
-      height: ${size}px;
-      background: ${COLORS[Math.floor(Math.random() * COLORS.length)]};
-      border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
-      animation-duration: ${Math.random() * 1.5 + 1.8}s;
-      animation-delay: 0s;
+      left:${Math.random() * 100}vw;
+      width:${size}px; height:${size}px;
+      background:${COLORS[Math.floor(Math.random() * COLORS.length)]};
+      border-radius:${Math.random() > 0.5 ? '50%' : '2px'};
+      animation-duration:${(Math.random() * 1.5 + 1.8).toFixed(2)}s;
     `;
     document.body.appendChild(el);
     el.addEventListener('animationend', () => el.remove());
   }
 </script>
-
 </body>
 </html>
